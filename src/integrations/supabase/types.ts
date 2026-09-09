@@ -14,7 +14,65 @@ export type Database = {
   }
   public: {
     Tables: {
-      [_ in never]: never
+      center_species_status: {
+        Row: {
+          center_id: string
+          id: string
+          species: Database["public"]["Enums"]["species_category"]
+          status: Database["public"]["Enums"]["capacity_status"]
+          updated_at: string
+        }
+        Insert: {
+          center_id: string
+          id?: string
+          species: Database["public"]["Enums"]["species_category"]
+          status?: Database["public"]["Enums"]["capacity_status"]
+          updated_at?: string
+        }
+        Update: {
+          center_id?: string
+          id?: string
+          species?: Database["public"]["Enums"]["species_category"]
+          status?: Database["public"]["Enums"]["capacity_status"]
+          updated_at?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "center_species_status_center_id_fkey"
+            columns: ["center_id"]
+            isOneToOne: false
+            referencedRelation: "centers"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      centers: {
+        Row: {
+          created_at: string
+          id: string
+          latitude: number
+          longitude: number
+          name: string
+          phone: string
+        }
+        Insert: {
+          created_at?: string
+          id?: string
+          latitude: number
+          longitude: number
+          name: string
+          phone: string
+        }
+        Update: {
+          created_at?: string
+          id?: string
+          latitude?: number
+          longitude?: number
+          name?: string
+          phone?: string
+        }
+        Relationships: []
+      }
     }
     Views: {
       [_ in never]: never
@@ -23,7 +81,13 @@ export type Database = {
       [_ in never]: never
     }
     Enums: {
-      [_ in never]: never
+      capacity_status: "open" | "full" | "by_appointment"
+      species_category:
+        | "birds"
+        | "mammals_small"
+        | "mammals_medium"
+        | "fawns"
+        | "reptiles"
     }
     CompositeTypes: {
       [_ in never]: never
@@ -150,6 +214,15 @@ export type CompositeTypes<
 
 export const Constants = {
   public: {
-    Enums: {},
+    Enums: {
+      capacity_status: ["open", "full", "by_appointment"],
+      species_category: [
+        "birds",
+        "mammals_small",
+        "mammals_medium",
+        "fawns",
+        "reptiles",
+      ],
+    },
   },
 } as const
