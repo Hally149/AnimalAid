@@ -21,15 +21,15 @@ const SPECIES_IDS = SPECIES.map((s) => s.id);
 const SITUATION_IDS = SITUATIONS.map((s) => s.id);
 
 export const Route = createFileRoute("/")({
-  validateSearch: (search: Record<string, unknown>): Search => ({
-    species: SPECIES_IDS.includes(search["species"] as Species)
-      ? (search["species"] as Species)
-      : undefined,
-    situation: SITUATION_IDS.includes(search["situation"] as SituationId)
-      ? (search["situation"] as SituationId)
-      : undefined,
-    go: search["go"] === true || search["go"] === "true" ? true : undefined,
-  }),
+  validateSearch: (search: Record<string, unknown>): Search => {
+    const parsed: Search = {};
+    if (SPECIES_IDS.includes(search["species"] as Species)) parsed.species = search["species"] as Species;
+    if (SITUATION_IDS.includes(search["situation"] as SituationId)) {
+      parsed.situation = search["situation"] as SituationId;
+    }
+    if (search["go"] === true || search["go"] === "true") parsed.go = true;
+    return parsed;
+  },
   head: () => ({
     meta: [
       { title: "RehabStatus — Who has room for wildlife right now" },
@@ -89,7 +89,8 @@ function Triage() {
 
   const set = (next: Search) => navigate({ search: next });
 
-  if (!species) return <Landing centers={centers} isLoading={isLoading} onPick={(s) => set({ species: s })} />;
+  if (!species)
+    return <Landing centers={centers ?? []} isLoading={isLoading} onPick={(s) => set({ species: s })} />;
 
   if (!situation)
     return (
@@ -113,7 +114,7 @@ function Triage() {
   return (
     <Results
       species={species}
-      centers={centers}
+      centers={centers ?? []}
       isLoading={isLoading}
       onBack={() => set({ species })}
     />
