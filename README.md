@@ -1,4 +1,4 @@
-# WildAid Live
+# AnimalAid Live
 
 Build a web app called "RehabStatus" — a live capacity board that shows the public which wildlife rehabbers currently have room to take in an animal, filtered by species, instead of a static directory.
 
